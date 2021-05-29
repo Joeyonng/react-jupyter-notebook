@@ -1,7 +1,7 @@
 {
   "name": "react-jupyter-notebook",
-  "version": "0.2.0",
-  "homepage": "https://Joeyonng.github.io/react-jupyter-notebook",
+  "version": "0.2.1",
+  "homepage": "https://github.com/Joeyonng/react-jupyter-notebook",
   "private": false,
   "description": "A simple React component that renders .ipynb files just like how they are rendered by Jupyter Lab",
   "keywords": [
@@ -19,6 +19,7 @@
   ],
   "main": "dist/JupyterViewer.js",
   "dependencies": {
+    "@babel/runtime": "^7.14.0",
     "ansi-to-react": "^6.1.4",
     "katex": "^0.13.2",
     "prop-types": "^15.7.2",
