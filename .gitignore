@@ -22,4 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# distribution
 /dist
+
+# idea
+/.idea

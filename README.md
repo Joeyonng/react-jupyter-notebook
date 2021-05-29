@@ -1,8 +1,8 @@
 # react-jupyter-notebook
 
----
 A simple React component that renders .ipynb files just like how they are rendered by JupyterLab.
 
+Demo: https://joeyonng.github.io/react-jupyter-notebook/
 
 ### Why
 I created this component because I want to embed a pure frontend jupyter notebooks (ipynb files) viewer into my personal
@@ -18,7 +18,7 @@ npm install --save react-jupyter-notebook
 
 ### Features
 * [X] Have nearly identical looking to original JupyterLab interface.
-* [X] Can render codes, images, outputs, markdown(equations) and HTML in the notebook flawlessly.
+* [X] Can render codes, images, outputs, markdown(equations) and HTML in the notebook.
 * [X] Enable resizing the height of the scrolled output. 
 * [X] Can change the alignment of the media outputs.
 
@@ -45,7 +45,7 @@ ReactDOM.render(
 ### Props
 Prop name | Description | Possible (*default*) Values
 --- | --- | --- 
-rawIpynb | The JSON object converted from the .ipynb file | 
-mediaAlign | How to align medias (Images, HTML) | *"center"*, "left", "right"
-displaySource | Whether source cells are always displayed | *"auto"*, "always"
-displayOutput | Whether output cells are always displayed | *"auto"*, "always"
+rawIpynb | The JSON object converted from the .ipynb file. | 
+mediaAlign | How to align medias (images, HTML). | *"center"*, "left", "right"
+displaySource | How source cells are displayed. | *"auto"*, "hide", "show"
+displayOutput | How output cells are displayed. | *"auto"*, "hide", "show", "scroll"
