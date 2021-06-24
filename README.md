@@ -17,10 +17,11 @@ npm install --save react-jupyter-notebook
 ```
 
 ### Features
-* [X] Have nearly identical looking to original JupyterLab interface.
+* [X] Nearly identical looking to original JupyterLab interface.
 * [X] Can render codes, images, outputs, markdown(equations) and HTML in the notebook.
 * [X] Enable resizing the height of the scrolled output. 
 * [X] Can change the alignment of the media outputs.
+* [X] Customisable code block styling.
 
 ### Usage
 ```javascript
@@ -31,21 +32,37 @@ import nb_test from "./nb_test.json"; // You need to read the .ipynb file into a
 
 ReactDOM.render(
   <React.StrictMode>
-    <JupyterViewer
-      rawIpynb={nb_test}
-      mediaAlign="left"
-      displaySource="auto"
-      displayOutput="auto"
-    />
+    <JupyterViewer rawIpynb={nb_test}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
 ```
 
 ### Props
-Prop name | Description | Possible (*default*) Values
---- | --- | --- 
-rawIpynb | The JSON object converted from the .ipynb file. | 
-mediaAlign | How to align medias (images, HTML). | *"center"*, "left", "right"
-displaySource | How source cells are displayed. | *"auto"*, "hide", "show"
-displayOutput | How output cells are displayed. | *"auto"*, "hide", "show", "scroll"
+| Prop name       | Description                                                     | (*default*) Values                                                                      |
+|-----------------|-----------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| rawIpynb        | The JSON object converted from the .ipynb file.                 |                                                                                         |
+| showLineNumbers | Show or hide the line numbers.                                  | *true*, false                                                                           |
+| mediaAlign      | How to align medias (images, HTML).                             | *"center"*, "left", "right"                                                             |
+| displaySource   | How source cells are displayed.                                 | *"auto"*, "hide", "show"                                                                |
+| displayOutput   | How output cells are displayed.                                 | *"auto"*, "hide", "show", "scroll"                                                      |
+| codeBlockStyles | Customize code cells styles. Use JupyterLab theme if undefined. | *undefined*, {hljsStyle, lineNumberContainerStyle, lineNumberStyle, codeContainerStyle} |
+
+### Customising code block styles (codeBlockStyles prop)
+I use [React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter) for the syntax 
+highlighting. One little problem with React Syntax Highlighter is that the whole line number container cannot be 
+separately styled. The line number part in the original JupyterLab theme has a different background color with the codes 
+part, so they need to be separately styled. My solution is to use two `<SyntaxHighlighter/>` components: one displays line 
+numbers, and the other displays codes themselves. 
+
+You can use codeBlockStyles prop to pass the props to the SyntaxHighlighter to customize your own code block styles.
+Please read the docs of React Syntax Highlighter if you want to use this prop. 
+
+| Property Name            | Type   | Description                                              | Which `<SyntaxHighlighter/>` |
+|--------------------------|--------|----------------------------------------------------------|------------------------------|
+| hljsStyle                | String | Name of the highlight.js style object. See [here][hljs]. | Both line number and code.   |
+| lineNumberStyle          | Object | Style object for the container of line numbers.          | Line number.                 |
+| lineNumberContainerStyle | Object | Style object for every line numbers object.              | Line number.                 |
+| codeContainerStyle       | Object | Style object for the container of the codes.             | Code.                        |
+
+[hljs]: https://github.com/react-syntax-highlighter/react-syntax-highlighter/blob/master/AVAILABLE_STYLES_HLJS.MD

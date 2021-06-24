@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import nb_test from "./nb_test.json"
 
 import JupyterViewer from "./lib/JupyterViewer";
+import hljsStyles from "./lib/hljsStyles";
+
 
 function App(props) {
   const [state, setState] = useState({
@@ -9,6 +11,8 @@ function App(props) {
     mediaAlign: "left",
     displaySource: "auto",
     displayOutput: "auto",
+    showLineNumbers: true,
+    codeBlockStyles: undefined,
   })
 
   return (
@@ -75,14 +79,47 @@ function App(props) {
             <option value="scroll">scroll</option>
           </select>
         </div>
+        <div>
+          <label htmlFor="showLineNumbers">showLineNumbers</label>
+          <select
+            name="showLineNumbers"
+            onChange={e => {
+              setState({...state, showLineNumbers: e.target.value === 'show'})
+            }}
+          >
+            <option value="show">show</option>
+            <option value="hide">hide</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="hljsStyle">hljsStyle</label>
+          <select
+            name="hljsStyle"
+            onChange={e => {
+              setState({
+                ...state,
+                codeBlockStyles: e.target.value === 'default' ? undefined : {
+                  hljsStyle: e.target.value,
+                }
+              })
+            }}
+          >
+            <option key="default" value="default">DEFAULT</option>
+            {Object.keys(hljsStyles).map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {!state.rawIpynb ? null :
         <JupyterViewer
           rawIpynb={state.rawIpynb}
           mediaAlign={state.mediaAlign}
+          showLineNumbers={state.showLineNumbers}
           displaySource={state.displaySource}
           displayOutput={state.displayOutput}
+          codeBlockStyles={state.codeBlockStyles}
         />
       }
     </React.Fragment>

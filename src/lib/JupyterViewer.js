@@ -2,18 +2,19 @@ import React, {useCallback, useState} from 'react';
 import PropTypes from 'prop-types';
 import Ansi from "ansi-to-react";
 import ReactMarkdown from 'react-markdown';
+import RemarkGFM from "remark-gfm";
 import RemarkMath from "remark-math";
-import gfm from 'remark-gfm';
-import {InlineMath, BlockMath} from 'react-katex';
+import RehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css';
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
-import {vs} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 
 import './JupyterViewer.scss';
+import hljsStyles from './hljsStyles'
+
 
 function BlockSource(props) {
   const metadata = props.cell['metadata'];
-  const source = props.cell['source'].join("");
+  const source = props.cell['source'];
   const type = props.cell['cell_type'];
 
   const [state, setState] = useState({
@@ -37,35 +38,79 @@ function BlockSource(props) {
   let executionCount;
   if (type === 'code') {
     executionCount = props.cell['execution_count'];
+
+    // SyntaxHighlighter originally doesn't separate the line numbers and the codes.
+    // The first SyntaxHighlighter is used to show line numbers only and the second is to show codes only.
+    const {hljsStyle, lineNumberContainerStyle, lineNumberStyle, codeContainerStyle} = props.codeBlockStyles ?
+      props.codeBlockStyles : {};
     htmlContent = (
-      <SyntaxHighlighter
-        language="python"
-        style={vs}
-        customStyle={{
-          margin: "0 0 0 0",
-          padding: "5px 0 5px 0",
-          flex: "1",
-          backgroundColor: "#F5F5F5",
-        }}
-        showLineNumbers={true}
-      >
-        {source}
-      </SyntaxHighlighter>
+      <div className="cell-content source-code">
+        {!props.showLineNumbers ? null :
+          <SyntaxHighlighter
+            language="python"
+            style={hljsStyle ? hljsStyles[hljsStyle] : hljsStyles.vs}
+            codeTagProps={{
+              style: {
+                fontFamily: "Menlo, Consolas, 'DejaVu Sans Mono', monospace",
+                fontSize: "13px",
+              }
+            }}
+            customStyle={hljsStyle ? lineNumberContainerStyle : {
+              width: "37px",
+              margin: "0 0 0 0",
+              padding: "5px 0 5px 0",
+              boxSizing: "border-box",
+              background: "#EEEEEE",
+              border: "solid 1px #E0E0E0",
+              overflow: "hidden",
+            }}
+            showLineNumbers={true}
+            lineNumberStyle={hljsStyle ? lineNumberStyle : {
+              width: "37px",
+              padding: "0 8px 0 8px",
+              boxSizing: "border-box",
+              color: "#999999",
+            }}
+          >
+            {source.map((item, index) => index === 0 ? ' ' : '\n').join('')}
+          </SyntaxHighlighter>
+        }
+
+        <div className="source-code-main">
+          <SyntaxHighlighter
+            language="python"
+            style={hljsStyle ? hljsStyles[hljsStyle] : hljsStyles.vs}
+            codeTagProps={{
+              style: {
+                fontFamily: "Menlo, Consolas, 'DejaVu Sans Mono', monospace",
+                fontSize: "13px",
+              }
+            }}
+            customStyle={hljsStyle ? codeContainerStyle : {
+              margin: "0 0 0 0",
+              padding: "5px 4px 5px 4px",
+              boxSizing: "border-box",
+              background: "#F5F5F5",
+              border: "solid 1px #E0E0E0",
+              flex: 1,
+            }}
+          >
+            {source.join('')}
+          </SyntaxHighlighter>
+        </div>
+      </div>
     )
   }
   else if (type === 'markdown') {
     // '$$' has to be in a separate new line to be rendered as a block math equation.
     const re = /\n?\s*\$\$\s*\n?/g;
-    let newSource = source.replaceAll(re, "\n$$$\n")
+    let newSource = source.join('').replaceAll(re, "\n$$$\n")
 
     htmlContent = (
       <div className="cell-content source-markdown">
         <ReactMarkdown
-          plugins={[RemarkMath, gfm]}
-          renderers={{
-            inlineMath: ({value}) => <InlineMath math={value} />,
-            math: ({value}) => <BlockMath math={value} />
-          }}
+          remarkPlugins={[RemarkGFM, RemarkMath]}
+          rehypePlugins={[RehypeKatex]}
         >
           {newSource}
         </ReactMarkdown>
@@ -251,11 +296,6 @@ function JupyterViewer(props) {
       className="jupyter-viewer"
     >
       {props.rawIpynb['cells'].map((cell, index) => {
-        const mediaAlign = {left: 'flex-start', center: 'center', right: 'flex-end'}[props.mediaAlign];
-        const highlighted = state.clickCellIndex === index;
-        const displaySource = DISPLAYS.indexOf(props.displaySource);
-        const displayOutput = DISPLAYS.indexOf(props.displayOutput)
-
         return (
           <div
             key={index}
@@ -267,16 +307,18 @@ function JupyterViewer(props) {
             {!('cell_type' in cell) ? null :
               <BlockSource
                 cell={cell}
-                highlighted={highlighted}
-                display={displaySource}
+                highlighted={state.clickCellIndex === index}
+                display={DISPLAYS.indexOf(props.displaySource)}
+                showLineNumbers={props.showLineNumbers}
+                codeBlockStyles={props.codeBlockStyles}
               />
             }
             {!('outputs' in cell) ? null :
               <BlockOutput
                 cell={cell}
-                highlighted={highlighted}
-                display={displayOutput}
-                mediaAlign={mediaAlign}
+                highlighted={state.clickCellIndex === index}
+                display={DISPLAYS.indexOf(props.displayOutput)}
+                mediaAlign={{left: 'flex-start', center: 'center', right: 'flex-end'}[props.mediaAlign]}
               />
             }
           </div>
@@ -288,15 +330,24 @@ function JupyterViewer(props) {
 
 JupyterViewer.defaultProps = {
   mediaAlign: 'center',
+  showLineNumbers: true,
   displaySource: 'auto',
   displayOutput: 'auto',
+  codeBlockStyles: undefined,
 };
 
 JupyterViewer.propTypes = {
   rawIpynb: PropTypes.object.isRequired,
   mediaAlign: PropTypes.oneOf(['left', 'center', 'right']),
+  showLineNumbers: PropTypes.bool,
   displaySource: PropTypes.oneOf(['auto', 'hide', 'show']),
   displayOutput: PropTypes.oneOf(['auto', 'hide', 'show', 'scroll']),
+  codeBlockStyles:  PropTypes.shape({
+    hljsStyle: PropTypes.oneOf(Object.keys(hljsStyles)),
+    lineNumberContainerStyle: PropTypes.object,
+    lineNumberStyle: PropTypes.object,
+    codeContainerStyle: PropTypes.object,
+  }),
 }
 
 export default JupyterViewer;
