@@ -25,7 +25,7 @@ function BlockSource(props) {
 
   if (props.display !== state.prevDisplay) {
     let newDisplay = props.display;
-    if (props.display === -1) {
+    if (newDisplay === -1) {
       if (metadata['jupyter'] !== undefined && metadata['jupyter']['source_hidden']) {
         newDisplay = 0;
       }
@@ -47,7 +47,7 @@ function BlockSource(props) {
       <div className="cell-content source-code">
         {!props.showLineNumbers ? null :
           <SyntaxHighlighter
-            language="python"
+            language={props.language}
             style={hljsStyle ? hljsStyles[hljsStyle] : hljsStyles.vs}
             codeTagProps={{
               style: {
@@ -78,7 +78,7 @@ function BlockSource(props) {
 
         <div className="source-code-main">
           <SyntaxHighlighter
-            language="python"
+            language={props.language}
             style={hljsStyle ? hljsStyles[hljsStyle] : hljsStyles.vs}
             codeTagProps={{
               style: {
@@ -160,7 +160,7 @@ function BlockOutput(props) {
 
   if (props.display !== state.prevDisplay) {
     let newDisplay = props.display;
-    if (props.display === -1) {
+    if (newDisplay === -1) {
       if (metadata['collapsed'] || (metadata['jupyter'] !== undefined && metadata['jupyter']['outputs_hidden'])) {
         newDisplay = 0;
       }
@@ -285,6 +285,7 @@ function BlockOutput(props) {
 }
 
 function JupyterViewer(props) {
+  // -1: auto, 0: hide, 1: show, 2: scroll
   const DISPLAYS = ['hide', 'show', 'scroll'];
 
   const [state, setState] = useState({
@@ -307,6 +308,7 @@ function JupyterViewer(props) {
             {!('cell_type' in cell) ? null :
               <BlockSource
                 cell={cell}
+                language={props.language}
                 highlighted={state.clickCellIndex === index}
                 display={DISPLAYS.indexOf(props.displaySource)}
                 showLineNumbers={props.showLineNumbers}
@@ -329,8 +331,9 @@ function JupyterViewer(props) {
 }
 
 JupyterViewer.defaultProps = {
-  mediaAlign: 'center',
+  language: 'python',
   showLineNumbers: true,
+  mediaAlign: 'center',
   displaySource: 'auto',
   displayOutput: 'auto',
   codeBlockStyles: undefined,
@@ -338,8 +341,9 @@ JupyterViewer.defaultProps = {
 
 JupyterViewer.propTypes = {
   rawIpynb: PropTypes.object.isRequired,
-  mediaAlign: PropTypes.oneOf(['left', 'center', 'right']),
+  language: PropTypes.string,
   showLineNumbers: PropTypes.bool,
+  mediaAlign: PropTypes.oneOf(['left', 'center', 'right']),
   displaySource: PropTypes.oneOf(['auto', 'hide', 'show']),
   displayOutput: PropTypes.oneOf(['auto', 'hide', 'show', 'scroll']),
   codeBlockStyles:  PropTypes.shape({

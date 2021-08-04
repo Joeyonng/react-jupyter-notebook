@@ -39,14 +39,15 @@ ReactDOM.render(
 ```
 
 ### Props
-| Prop name       | Description                                                     | (*default*) Values                                                                      |
-|-----------------|-----------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| rawIpynb        | The JSON object converted from the .ipynb file.                 |                                                                                         |
-| showLineNumbers | Show or hide the line numbers.                                  | *true*, false                                                                           |
-| mediaAlign      | How to align medias (images, HTML).                             | *"center"*, "left", "right"                                                             |
-| displaySource   | How source cells are displayed.                                 | *"auto"*, "hide", "show"                                                                |
-| displayOutput   | How output cells are displayed.                                 | *"auto"*, "hide", "show", "scroll"                                                      |
-| codeBlockStyles | Customize code cells styles. Use JupyterLab theme if undefined. | *undefined*, {hljsStyle, lineNumberContainerStyle, lineNumberStyle, codeContainerStyle} |
+| Prop name       | Type    | Description                                                     | (*default*) Values                 |
+|-----------------|---------|-----------------------------------------------------------------|------------------------------------|
+| rawIpynb        | Object  | The JSON object converted from the .ipynb file.                 |                                    |
+| language        | String  | The programming language used in the notebook.                  | *"python"*, [others][language]     |
+| showLineNumbers | Boolean | Show or hide the line numbers.                                  | *true*, false                      |
+| mediaAlign      | String  | How to align medias (images, HTML).                             | *"center"*, "left", "right"        |
+| displaySource   | String  | How source cells are displayed.                                 | *"auto"*, "hide", "show"           |
+| displayOutput   | String  | How output cells are displayed.                                 | *"auto"*, "hide", "show", "scroll" |
+| codeBlockStyles | Object  | Customize code cells styles. Use JupyterLab theme if undefined. | *undefined*, {...}                 |
 
 ### Customising code block styles (codeBlockStyles prop)
 I use [React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter) for the syntax 
@@ -61,8 +62,10 @@ Please read the docs of React Syntax Highlighter if you want to use this prop.
 | Property Name            | Type   | Description                                              | Which `<SyntaxHighlighter/>` |
 |--------------------------|--------|----------------------------------------------------------|------------------------------|
 | hljsStyle                | String | Name of the highlight.js style object. See [here][hljs]. | Both line number and code.   |
-| lineNumberStyle          | Object | Style object for the container of line numbers.          | Line number.                 |
-| lineNumberContainerStyle | Object | Style object for every line numbers object.              | Line number.                 |
+| lineNumberStyle          | Object | Style object for every line numbers object.              | Line number.                 |
+| lineNumberContainerStyle | Object | Style object for the container of line numbers.          | Line number.                 |
 | codeContainerStyle       | Object | Style object for the container of the codes.             | Code.                        |
 
+[language]: https://github.com/react-syntax-highlighter/react-syntax-highlighter/blob/master/AVAILABLE_LANGUAGES_HLJS.MD
 [hljs]: https://github.com/react-syntax-highlighter/react-syntax-highlighter/blob/master/AVAILABLE_STYLES_HLJS.MD
+
