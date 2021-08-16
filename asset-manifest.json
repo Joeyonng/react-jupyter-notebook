@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/react-jupyter-notebook/static/css/main.8f371aa6.chunk.css",
+    "main.js": "/react-jupyter-notebook/static/js/main.680ad770.chunk.js",
+    "main.js.map": "/react-jupyter-notebook/static/js/main.680ad770.chunk.js.map",
+    "runtime-main.js": "/react-jupyter-notebook/static/js/runtime-main.fcefa3b9.js",
+    "runtime-main.js.map": "/react-jupyter-notebook/static/js/runtime-main.fcefa3b9.js.map",
+    "static/css/2.8d13b9e6.chunk.css": "/react-jupyter-notebook/static/css/2.8d13b9e6.chunk.css",
+    "static/js/2.a2823688.chunk.js": "/react-jupyter-notebook/static/js/2.a2823688.chunk.js",
+    "static/js/2.a2823688.chunk.js.map": "/react-jupyter-notebook/static/js/2.a2823688.chunk.js.map",
+    "index.html": "/react-jupyter-notebook/index.html",
+    "static/css/2.8d13b9e6.chunk.css.map": "/react-jupyter-notebook/static/css/2.8d13b9e6.chunk.css.map",
+    "static/css/main.8f371aa6.chunk.css.map": "/react-jupyter-notebook/static/css/main.8f371aa6.chunk.css.map",
+    "static/js/2.a2823688.chunk.js.LICENSE.txt": "/react-jupyter-notebook/static/js/2.a2823688.chunk.js.LICENSE.txt",
+    "static/media/katex.min.css": "/react-jupyter-notebook/static/media/KaTeX_Typewriter-Regular.b6a56b14.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fcefa3b9.js",
+    "static/css/2.8d13b9e6.chunk.css",
+    "static/js/2.a2823688.chunk.js",
+    "static/css/main.8f371aa6.chunk.css",
+    "static/js/main.680ad770.chunk.js"
+  ]
+}
