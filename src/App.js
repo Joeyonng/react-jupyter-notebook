@@ -4,8 +4,7 @@ import nb_test from "./nb_test.json"
 import JupyterViewer from "./lib/JupyterViewer";
 import hljsStyles from "./lib/hljsStyles";
 
-
-function App(props) {
+function App() {
   const [state, setState] = useState({
     rawIpynb: nb_test,
     mediaAlign: "left",

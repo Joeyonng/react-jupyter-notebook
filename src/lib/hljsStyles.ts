@@ -1,6 +1,6 @@
 import * as hljs from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-const hljsStyles = {
+const hljsStyles: {[key: string]: {}} = {
   'a11yDark': hljs.a11yDark,
   'a11yLight': hljs.a11yLight,
   'agate': hljs.agate,
@@ -47,7 +47,6 @@ const hljsStyles = {
   'gml': hljs.gml,
   'googlecode': hljs.googlecode,
   'gradientDark': hljs.gradientDark,
-  'gradientLight': hljs.gradientLight,
   'grayscale': hljs.grayscale,
   'gruvboxDark': hljs.gruvboxDark,
   'gruvboxLight': hljs.gruvboxLight,
@@ -85,8 +84,6 @@ const hljsStyles = {
   'solarizedDark': hljs.solarizedDark,
   'solarizedLight': hljs.solarizedLight,
   'srcery': hljs.srcery,
-  'stackoverflowDark': hljs.stackoverflowDark,
-  'stackoverflowLight': hljs.stackoverflowLight,
   'sunburst': hljs.sunburst,
   'tomorrowNightBlue': hljs.tomorrowNightBlue,
   'tomorrowNightBright': hljs.tomorrowNightBright,
